@@ -1,4 +1,4 @@
-# Titanic Project
+# Titanic Project - Kaggle
 
 import pandas as pd
 

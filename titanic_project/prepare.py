@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 def cabin_missing_data(i):
     '''
-    Based on our research let's fill in the missing cabin info with the following:
+    Based on our exploration let's fill in the missing cabin info with the following:
     '''
     j = 0
     if i < 16:
@@ -47,10 +47,25 @@ def encode_embarked(df):
     '''
     Function to encode the embarked column
     '''
-    encoder = LabelEncoder()
-    encoder.fit(df.Embarked)
+    object_columns = df.select_dtypes(include='object').columns.tolist()
+    category_columns = df.select_dtypes(include='category').columns.tolist()
+    columns_to_encode = category_columns + object_columns
 
-    return df.assign(Embarked_Encode=encoder.transform(df.Embarked))
+    for col in columns_to_encode:
+        encoder = LabelEncoder()
+        encoder.fit(df[col])
+        new_encoded_column = 'Encoded_'+col
+        df[new_encoded_column] = encoder.transform(df[col])
+
+    return df
+
+
+def remove_columns(df):
+    '''
+    Function to drop any unwanted columns
+    '''
+    return df.drop(columns=['Encoded_Name', 'Encoded_Ticket', 'Encoded_Cabin',
+                            'Embarked', 'PassengerId'])
 
 
 def prep_titanic_data(df):
@@ -59,5 +74,6 @@ def prep_titanic_data(df):
     '''
     df = handle_missing_values(df)
     df = encode_embarked(df)
+    df = remove_columns(df)
 
     return df

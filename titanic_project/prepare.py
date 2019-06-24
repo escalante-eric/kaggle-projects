@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 def cabin_missing_data(i):
     '''
-    Based on our exploration let's fill in the missing cabin info with the following:
+    Function that fills in the missing cabin info with the following:
     '''
     j = 0
     if i < 16:
